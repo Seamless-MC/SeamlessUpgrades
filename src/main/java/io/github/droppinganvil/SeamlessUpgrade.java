@@ -35,9 +35,9 @@ public class SeamlessUpgrade {
     public void removeOne(Player p) {
         String uuid = p.getUniqueId().toString();
         players.replace(uuid, players.get(uuid), players.get(uuid) - 1);
-        p.sendMessage(select(name, "-Remove")
+        p.sendMessage(select(name, "-Removed")
                 .replace("{UPGRADE}", friendlyName)
-                .replace("{AMOUNT}", players.get(uuid)));
+                .replace("{AMOUNT}", String.valueOf(players.get(uuid))));
     }
 
     public void addOne(Player p) {
@@ -47,32 +47,14 @@ public class SeamlessUpgrade {
         } else {
             players.put(uuid, 1);
         }
-        p.sendMessage(select(name, "-Remove")
+        p.sendMessage(select(name, "-Added")
                 .replace("{UPGRADE}", friendlyName)
-                .replace("{AMOUNT}", players.get(uuid)));
+                .replace("{AMOUNT}", String.valueOf(players.get(uuid))));
     }
 
     public static String select(String name, String operation) {
         /* operation needs to be -Removed, -Added, or -Edited */
-        int index = 0;
-        String temp = config.getString("Messages." + name + operation);
-        while (temp == null) {
-            switch (index) {
-                case 0:
-                    temp = config.getString("Messages." + name + "-Edited");
-                    break;
-                case 1:
-                    temp = config.getString("Messages.Generic" + operation);
-                    break;
-                case 2:
-                    temp = config.getString("Messages.Generic-Edited");
-                    break;
-                case 3:
-                    temp = "&8[&4&l&oSF&r&8]&r &8You now have {AMOUNT} {UPGRADE}s";
-            }
-            index++;
-        }
-        return ChatColor.translateAlternateColorCodes('&', temp);
+        return ChatColor.translateAlternateColorCodes('&', config.getString("Messages." + name + operation));
     }
 
     private void load() {
