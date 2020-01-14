@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public class SeamlessUpgrade {
     public static FileConfiguration data;
-    public static FileConfiguration config;
     private String name;
     private String friendlyName;
     private HashMap<String, Integer> players;
@@ -16,9 +15,6 @@ public class SeamlessUpgrade {
     public SeamlessUpgrade(String name) {
         if (data == null) {
             data = SeamlessUpgrades.getInstance().data;
-        }
-        if (config == null) {
-            data = SeamlessUpgrades.getInstance().getConfig();
         }
         this.name = name;
         this.friendlyName = name.replace('_', ' ');
@@ -54,7 +50,26 @@ public class SeamlessUpgrade {
 
     public static String select(String name, String operation) {
         /* operation needs to be -Removed, -Added, or -Edited */
-        return ChatColor.translateAlternateColorCodes('&', config.getString("Messages." + name + operation));
+        int index = 0;
+        FileConfiguration config = SeamlessUpgrades.getInstance().getConfig();
+        String temp = config.getString("Messages." + name + operation);
+        while (temp == null) {
+            switch (index) {
+                case 0:
+                    temp = config.getString("Messages." + name + "-Edited");
+                    break;
+                case 1:
+                    temp = config.getString("Messages.Generic" + operation);
+                    break;
+                case 2:
+                    temp = config.getString("Messages.Generic-Edited");
+                    break;
+                case 3:
+                    temp = "&8[&4&l&oSF&r&8]&r &8You now have {AMOUNT} {UPGRADE}s";
+            }
+            index++;
+        }
+        return ChatColor.translateAlternateColorCodes('&', temp);
     }
 
     private void load() {
