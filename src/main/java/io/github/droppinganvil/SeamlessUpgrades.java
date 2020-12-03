@@ -33,6 +33,7 @@ public class SeamlessUpgrades extends JavaPlugin {
         }
         data = YamlConfiguration.loadConfiguration(dataFile);
         upgrades.put("Keep_Inventory", new SeamlessUpgrade("Keep_Inventory"));
+        upgrades.put("Keep_Exp", new SeamlessUpgrade("Keep_Exp"));
         getServer().getPluginManager().registerEvents(new SeamlessUpgradeListeners(), this);
         getCommand("upgrades").setExecutor(new UpgradeCommandManager());
     }
